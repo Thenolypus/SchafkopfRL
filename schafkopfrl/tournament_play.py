@@ -6,6 +6,7 @@ from models.actor_critic_lstm import ActorCriticNetworkLSTM
 from models.hand_predictor import HandPredictor
 from models.immitation_policy import ImmitationPolicy
 from players.pimc_player import PIMCPlayer
+from players.controllable_player import ControllablePlayer
 from players.random_coward_player import RandomCowardPlayer
 from players.random_player import RandomPlayer
 from players.rl_player import RlPlayer
@@ -17,8 +18,15 @@ from settings import Settings
 
 def main():
 
-  pimc_player = PIMCPlayer(10, 40, RandomPlayer())
+  pimc_player1 = PIMCPlayer(10, 40, RandomPlayer())
+  pimc_player2 = PIMCPlayer(10, 40, RandomPlayer())
+  pimc_player3 = PIMCPlayer(10, 40, RandomPlayer())
+  pimc_player4 = PIMCPlayer(10, 40, RandomPlayer())
 
+  controllable_player = ControllablePlayer()
+  
+  '''
+  # Removing this section as we do not need the other agents.
   policy = ActorCriticNetworkLSTM().to(Settings.device)
   policy.load_state_dict(torch.load("../policies/pretrained/lstm-policy.pt"))
   rl_player = RlPlayer(policy, action_shaping=False, eval=True)
@@ -30,8 +38,9 @@ def main():
   ip = ImmitationPolicy().to(Settings.device)
   ip.load_state_dict(torch.load("../policies/00010340.pt"))
   immitation_player = RlPlayer(ip, action_shaping=False, eval=True)
+  '''
 
-  participants = [rl_player, immitation_player, smart_pimc_player, pimc_player, RuleBasedPlayer(), RandomCowardPlayer(), RandomPlayer(),]
+  participants = [controllable_player, pimc_player2, pimc_player3, pimc_player4]
 
   number_of_games = 1000
 
@@ -61,7 +70,7 @@ def main():
 
           if game_nr % 100 == 0:
             print('.', end = '')
-          #schafkopf_env.print_game()
+          schafkopf_env.print_game()
 
       print("player "+str(i)+" vs. player "+str(j)+" = " + str((cummulative_reward[2] + cummulative_reward[3]) / (2*2*number_of_games)) + " to " +str((cummulative_reward[0] + cummulative_reward[1]) / (2*2*number_of_games)))
       #print("--------Episode: " + str(i_episode) + " game simulation (s) = " + str(t1 - t0))
