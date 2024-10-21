@@ -1,8 +1,5 @@
 from players.player import Player
 
-import random
-
-
 class ControllablePlayer(Player):
   '''
   Controllable player.
@@ -33,7 +30,7 @@ class ControllablePlayer(Player):
     print("Allowed actions:", ", ".join(translated_actions))
 
   '''
-  TODO: Implement finish translated actions and simpler player choices.
+  TODO: Understand more about the game to see if the stages are properly implemented.
   '''
   def act(self, state):
     allowed_actions, gamestate = state["allowed_actions"], state["game_state"]
